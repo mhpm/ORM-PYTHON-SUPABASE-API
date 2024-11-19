@@ -1,6 +1,7 @@
 # Recreate the requirements.txt file
 requirements = """
 flask
+gunicorn
 supabase
 python-dotenv
 flasgger
