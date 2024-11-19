@@ -1,0 +1,11 @@
+# Recreate the requirements.txt file
+requirements = """
+flask
+supabase
+python-dotenv
+flasgger
+werkzeug
+"""
+
+with open("requirements.txt", "w") as file:
+    file.write(requirements)
