@@ -93,7 +93,6 @@ def create_user():
             return {"error": f"Missing fields: {', '.join(missing_fields)}"}, 400
 
         hashed_password = generate_password_hash(new_user["password"])
-        avatar_url = "https://avatar.iran.liara.run/username?username="
 
         user_data = {
             "first_name": new_user["first_name"],
@@ -103,7 +102,7 @@ def create_user():
             "role": new_user.get("role", "user"),
             "avatar": new_user.get(
                 "avatar",
-                f"{avatar_url}{new_user["first_name"]+'+'+new_user["last_name"]}",
+                "https://avatars.githubusercontent.com/u/273650",
             ),
         }
 
