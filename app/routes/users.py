@@ -38,14 +38,21 @@ def get_users():
         if page < 1 or limit < 1:
             raise ValueError("Pagination parameters must be positive integers.")
 
-        # Fetch users
+        # Fetch total count of users
+        total_response = supabase.table("users").select("*", count="exact").execute()
+        error_response = handle_supabase_error(total_response)
+        if error_response:
+            return jsonify(error_response), 400
+
+        total_count = total_response.count
+
+        # Fetch users with pagination
         response = (
             supabase.table("users")
             .select("*")
             .range(offset, offset + limit - 1)
             .execute()
         )
-
         error_response = handle_supabase_error(response)
         if error_response:
             return jsonify(error_response), 400
@@ -53,7 +60,12 @@ def get_users():
         if not response.data:
             return {"message": "No users found"}, 404
 
-        return {"users": response.data, "page": page, "limit": limit}, 200
+        return {
+            "users": response.data,
+            "page": page,
+            "limit": limit,
+            "total": total_count,
+        }, 200
 
     except ValueError as e:
         logging.warning(f"Invalid pagination: {str(e)}")
