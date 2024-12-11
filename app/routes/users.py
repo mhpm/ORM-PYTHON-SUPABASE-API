@@ -20,12 +20,6 @@ def handle_exception(e):
     return {"error": "Internal server error"}, 500
 
 
-# Users Home
-@users_bp.route("/")
-def users_home():
-    return {"message": "Welcome to Users Supabase API"}, 200
-
-
 # GET all users
 @users_bp.route("/users", methods=["GET"])
 def get_users():
@@ -51,6 +45,7 @@ def get_users():
             supabase.table("users")
             .select("*")
             .range(offset, offset + limit - 1)
+            .order("id", desc=True)
             .execute()
         )
         error_response = handle_supabase_error(response)
